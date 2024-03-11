@@ -1,34 +1,74 @@
-import java.time.LocalDate;
-import java.time.Period;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
+class Mahasiswa {
+    String nama;
+    String nim;
+    String jurusan;
+
+    public Mahasiswa(String nama, String nim, String jurusan) {
+        this.nama = nama;
+        this.nim = nim;
+        this.jurusan = jurusan;
+    }
+
+    @Override
+    public String toString() {
+        return "Nama: " + nama + ", NIM: " + nim + ", Jurusan: " + jurusan;
+    }
+}
+
 public class Main {
+
     public static void main(String[] args) {
-        Scanner input = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
+        List<Mahasiswa> mahasiswaList = new ArrayList<>();
 
-        System.out.print("Masukkan nama: ");
-        String nama = input.nextLine();
+        while (true) {
+            System.out.println("\nMenu:");
+            System.out.println("1. Tambah DATA Mahasiswa");
+            System.out.println("2. Tampilkan Data Mahasiswa");
+            System.out.println("3. Keluar");
+            System.out.print("Pilihan anda: ");
+            int userChoice = scanner.nextInt();
 
-        System.out.print("Jenis Kelamin (L/P): ");
-        String jenisKelaminInput = input.nextLine();
+            if (userChoice == 1) {
+                System.out.print("Masukan nama mahasiswa: ");
+                scanner.nextLine(); // Consume newline
+                String name = scanner.nextLine();
 
-        String jenisKelamin;
-        if (jenisKelaminInput.equalsIgnoreCase("L")) {
-            jenisKelamin = "Laki-laki";
-        } else {
-            jenisKelamin = "Perempuan";
+                String nim;
+                while (true) {
+                    System.out.print("Masukkan NIM Mahasiswa: ");
+                    nim = scanner.nextLine();
+                    if (nim.matches("\\d{15}")) {
+                        break;
+                    } else {
+                        System.out.println("NIM Harus 15 Digit!!!");
+                    }
+                }
+
+                System.out.print("Masukkan jurusan mahasiswa: ");
+                String major = scanner.nextLine();
+
+                Mahasiswa mahasiswa = new Mahasiswa(name, nim, major);
+                mahasiswaList.add(mahasiswa);
+                System.out.println("Data mahasiswa berhasl di tambah.");
+
+            } else if (userChoice == 2) {
+                System.out.println("\nData Mahasiswa:");
+                for (Mahasiswa mahasiswa : mahasiswaList) {
+                    System.out.println(mahasiswa);
+                }
+            } else if (userChoice == 3) {
+                System.out.println("Adios");
+                break;
+            } else {
+                System.out.println("\nInvalid option, please try again.");
+            }
         }
 
-        System.out.print("Masukkan tanggal lahir (yyyy-mm-dd): ");
-        String tanggalLahirInput = input.nextLine();
-        LocalDate tanggalLahir = LocalDate.parse(tanggalLahirInput);
-        LocalDate sekarang = LocalDate.now();
-        Period umur = Period.between(tanggalLahir, sekarang);
-
-        System.out.println("Nama: " + nama);
-        System.out.println("Jenis Kelamin: " + jenisKelamin);
-        System.out.println("Umur anda: " + umur.getYears() + " tahun " + umur.getMonths() + " bulan");
-
-        input.close();
+        scanner.close();
     }
 }
